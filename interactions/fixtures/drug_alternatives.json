@@ -1,0 +1,155 @@
+[
+  {
+    "model": "interactions.drugalternative",
+    "pk": 1,
+    "fields": {
+      "drug_name": "Aspirin",
+      "alternative_name": "Paracetamol",
+      "reason": "Aspirin allergy"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 2,
+    "fields": {
+      "drug_name": "Ibuprofen",
+      "alternative_name": "Paracetamol",
+      "reason": "NSAID allergy"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 3,
+    "fields": {
+      "drug_name": "Diclofenac",
+      "alternative_name": "Paracetamol",
+      "reason": "NSAID allergy"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 4,
+    "fields": {
+      "drug_name": "Naproxen",
+      "alternative_name": "Paracetamol",
+      "reason": "NSAID allergy"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 5,
+    "fields": {
+      "drug_name": "Amoxicillin",
+      "alternative_name": "Azithromycin",
+      "reason": "Penicillin allergy"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 6,
+    "fields": {
+      "drug_name": "Penicillin",
+      "alternative_name": "Azithromycin",
+      "reason": "Penicillin allergy"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 7,
+    "fields": {
+      "drug_name": "Penicillin",
+      "alternative_name": "Doxycycline",
+      "reason": "Penicillin allergy"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 8,
+    "fields": {
+      "drug_name": "Enalapril",
+      "alternative_name": "Losartan",
+      "reason": "ACE inhibitor intolerance"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 9,
+    "fields": {
+      "drug_name": "Ramipril",
+      "alternative_name": "Losartan",
+      "reason": "ACE inhibitor cough"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 10,
+    "fields": {
+      "drug_name": "Lisinopril",
+      "alternative_name": "Valsartan",
+      "reason": "ACE inhibitor intolerance"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 11,
+    "fields": {
+      "drug_name": "Simvastatin",
+      "alternative_name": "Rosuvastatin",
+      "reason": "Better tolerated"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 12,
+    "fields": {
+      "drug_name": "Omeprazole",
+      "alternative_name": "Pantoprazole",
+      "reason": "Alternative proton pump inhibitor"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 13,
+    "fields": {
+      "drug_name": "Cetirizine",
+      "alternative_name": "Loratadine",
+      "reason": "Less sedation"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 14,
+    "fields": {
+      "drug_name": "Salbutamol",
+      "alternative_name": "Levalbuterol",
+      "reason": "Alternative bronchodilator"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 15,
+    "fields": {
+      "drug_name": "Warfarin",
+      "alternative_name": "Apixaban",
+      "reason": "Easier monitoring"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 16,
+    "fields": {
+      "drug_name": "Propranolol",
+      "alternative_name": "Metoprolol",
+      "reason": "Safer in asthma patients"
+    }
+  },
+  {
+    "model": "interactions.drugalternative",
+    "pk": 17,
+    "fields": {
+      "drug_name": "Propranolol",
+      "alternative_name": "Atenolol",
+      "reason": "Cardioselective beta blocker"
+    }
+  }
+]

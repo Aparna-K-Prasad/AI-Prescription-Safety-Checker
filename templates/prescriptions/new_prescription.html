@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+
+
+<div class="card-body">
+{% include 'includes/navigation.html' %}
+
+<h2 class="mb-4">
+    💊 New Prescription
+</h2>
+<form method="POST">
+
+{% csrf_token %}
+
+<label class="form-label">
+Patient
+</label>
+
+<select
+    name="patient"
+    class="form-select mb-3"
+    required>
+
+    {% for patient in patients %}
+
+    <option
+    value="{{ patient.id }}"
+    {% if selected_patient == patient.id|stringformat:"s" %}
+    selected
+    {% endif %}
+>
+
+    {{ patient.name }}
+
+</option>
+
+    {% endfor %}
+
+</select>
+
+<label class="form-label">
+Doctor Name
+</label>
+
+<input
+    type="text"
+    name="doctor"
+    class="form-control mb-4"
+    required>
+
+<div id="drug-container">
+
+<div class="row mb-3 drug-row">
+<div class="col-md-5">
+
+    <div class="position-relative">
+
+        <input
+            type="text"
+            name="drug_name"
+            class="form-control drug-input"
+            placeholder="Medicine"
+            autocomplete="off"
+            required>
+
+        <div class="suggestions list-group position-absolute w-100"></div>
+
+    </div>
+
+</div>
+<div class="col-md-3">
+
+<input
+    type="text"
+    name="dosage"
+    class="form-control"
+    placeholder="Dosage">
+
+</div>
+
+<div class="col-md-3">
+
+<input
+    type="text"
+    name="duration"
+    class="form-control"
+    placeholder="Duration">
+
+</div>
+
+</div>
+<label class="form-label">
+    Follow-up Date
+</label>
+
+<input
+    type="date"
+    name="follow_up_date"
+    class="form-control">
+</div>
+<div class="mt-4">
+<button
+    type="button"
+    id="addDrug"
+    class="btn btn-secondary">
+
+    + Add Another Medicine
+
+</button>
+
+<button
+    type="submit"
+    class="btn btn-success">
+
+    Analyze Prescription
+
+</button>
+</div>
+</form>
+
+</div>
+
+</div>
+
+
+<script>
+
+function attachAutocomplete(input){
+
+    const suggestions =
+        input.parentElement.querySelector(
+            ".suggestions"
+        );
+
+    input.addEventListener("keyup", function(){
+
+        const term = input.value;
+
+        if(term.length < 1){
+
+            suggestions.innerHTML = "";
+
+            return;
+        }
+
+        fetch(`/search-drugs/?term=${term}`)
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            suggestions.innerHTML = "";
+
+            data.forEach(drug => {
+
+                const item =
+                    document.createElement("button");
+
+                item.type = "button";
+
+                item.className =
+                    "list-group-item list-group-item-action";
+
+                item.textContent = drug;
+
+                item.onclick = function(){
+
+                    input.value = drug;
+
+                    suggestions.innerHTML = "";
+
+                };
+
+                suggestions.appendChild(item);
+
+            });
+
+        });
+
+    });
+
+}
+
+document
+.getElementById("addDrug")
+.addEventListener("click", function(){
+
+    const container =
+        document.getElementById("drug-container");
+
+    const row =
+        document.querySelector(".drug-row");
+
+    const clone =
+        row.cloneNode(true);
+
+    clone.querySelectorAll("input")
+    .forEach(input => input.value = "");
+
+    container.appendChild(clone);
+
+    attachAutocomplete(
+        clone.querySelector(".drug-input")
+    );
+
+});
+
+document
+.querySelectorAll(".drug-input")
+.forEach(input => {
+
+    attachAutocomplete(input);
+
+});
+
+</script>
+
+{% endblock %}

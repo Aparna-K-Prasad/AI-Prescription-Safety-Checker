@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card shadow">
+
+
+<div class="card-header">
+    <h2>Dashboard</h2>
+</div>
+
+<div class="card-body">
+
+    <!-- Welcome Section -->
+
+    <div class="card mb-4 border-0 bg-light">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-8">
+
+                    <h3>
+                        Welcome back, Doctor 👋
+                    </h3>
+
+                    <p class="text-muted">
+
+                        Manage patients, prescriptions and safety checks from one place.
+
+                    </p>
+
+                    <p class="mb-0">
+
+                        <strong>Today:</strong>
+                        {{ today }}
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-4 text-center">
+
+                    <div style="font-size:60px;">
+                        🩺
+                    </div>
+
+                    <p class="text-muted mb-0">
+                        Patient Safety First
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Patient Statistics -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-12">
+
+            <a
+                href="{% url 'patient_list' %}"
+                class="text-decoration-none">
+
+                <div class="card text-center shadow-sm">
+
+                    <div class="card-body">
+
+                        <h1>
+                            {{ patient_count }}
+                        </h1>
+
+                        <h5 class="text-muted">
+
+                            👥 Patients
+
+                        </h5>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+                Quick Actions
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="d-flex gap-3">
+
+                <a
+                    href="{% url 'new_patient' %}"
+                    class="btn btn-success">
+
+                    ➕ Add Patient
+
+                </a>
+
+                <a
+                    href="{% url 'new_prescription' %}"
+                    class="btn btn-primary">
+
+                    💊 New Prescription
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Follow-ups -->
+
+    <div class="card-body">
+
+{% if upcoming_followups %}
+
+<ul class="list-group">
+
+{% for item in upcoming_followups %}
+
+<li class="list-group-item">
+
+    <strong>
+        {{ item.patient.name }}
+    </strong>
+
+    <br>
+
+    Follow-up:
+
+    {{ item.follow_up_date }}
+
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p class="text-muted">
+
+    No upcoming follow-ups.
+
+</p>
+
+{% endif %}
+
+</div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

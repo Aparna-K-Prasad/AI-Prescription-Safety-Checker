@@ -1,0 +1,32 @@
+DISEASES = [
+    "Asthma",
+    "Diabetes",
+    "Hypertension",
+    "Heart Disease",
+    "Kidney Disease",
+    "Liver Disease",
+    "COPD",
+    "Tuberculosis",
+    "Epilepsy",
+    "Arthritis",
+    "Thyroid Disorder",
+    "Cancer",
+    "Depression",
+    "Anxiety",
+    "Migraine",
+]
+
+ALLERGIES = [
+    "Penicillin",
+    "Amoxicillin",
+    "Aspirin",
+    "Ibuprofen",
+    "Sulfa Drugs",
+    "Latex",
+    "Peanuts",
+    "Milk",
+    "Eggs",
+    "Shellfish",
+    "Dust",
+    "Pollen",
+]

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card-body">
+
+    
+
+      {% include 'includes/navigation.html' %}
+<h2 class="mb-4">👥 Patients</h2>
+    </div>
+
+        <!-- Search -->
+
+        <input
+            type="text"
+            id="patientSearch"
+            class="form-control mb-3"
+            placeholder="🔍 Search patients...">
+
+        <!-- Patient List -->
+
+        <div class="list-group" id="patientList">
+
+            {% for patient in patients %}
+
+            <a
+                href="{% url 'patient_detail' patient.id %}"
+                class="list-group-item list-group-item-action patient-item">
+
+                <strong>
+                    {{ patient.name }}
+                </strong>
+
+                <span class="float-end">
+
+                    {{ patient.age }} years
+
+                </span>
+
+            </a>
+
+            {% empty %}
+
+            <div class="list-group-item">
+
+                No patients found.
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document
+.getElementById("patientSearch")
+.addEventListener("keyup", function(){
+
+    const search =
+        this.value.toLowerCase();
+
+    const patients =
+        document.querySelectorAll(
+            ".patient-item"
+        );
+
+    patients.forEach(patient => {
+
+        const text =
+            patient.textContent.toLowerCase();
+
+        if(text.includes(search)){
+
+            patient.style.display = "";
+
+        }
+        else{
+
+            patient.style.display = "none";
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

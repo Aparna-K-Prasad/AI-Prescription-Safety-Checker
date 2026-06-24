@@ -1,0 +1,469 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card-body">
+
+    
+
+      {% include 'includes/navigation.html' %}
+<h2 class="mb-4">
+
+{% if edit_mode %}
+
+    ✏️ Edit Patient
+
+{% else %}
+
+    ➕ Add Patient
+
+{% endif %}
+
+</h2>
+    </div>
+
+    <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Name
+                </label>
+
+                <input
+    type="text"
+    name="name"
+    class="form-control"
+    value="{{ patient.name|default:'' }}"
+    required>
+
+            </div>
+
+           <div class="mb-3">
+
+    <label class="form-label">
+        Date of Birth
+    </label>
+
+    <input
+    type="date"
+    name="date_of_birth"
+    class="form-control"
+    value="{{ patient.date_of_birth|date:'Y-m-d' }}"
+    required>
+
+</div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Gender
+                </label>
+
+                <select
+                    name="gender"
+                    class="form-select">
+
+                   <option
+    value="Male"
+    {% if patient.gender == "Male" %}selected{% endif %}>
+    Male
+</option>
+                    <option
+    value="Male"
+    {% if patient.gender == "Female" %}selected{% endif %}>
+    Female
+</option>
+                    <option
+    value="Male"
+    {% if patient.gender == "Other" %}selected{% endif %}>
+    Other
+</option>
+                </select>
+
+            </div>
+
+          <div class="mb-3">
+
+    <label class="form-label">
+    🤧 Allergies
+</label>
+
+<div class="position-relative">
+
+    <input
+        type="text"
+        id="allergyInput"
+        class="form-control"
+        placeholder="Type allergy..."
+        autocomplete="off">
+
+    <div
+        id="allergySuggestions"
+        class="list-group position-absolute w-100 shadow"
+        style="
+            z-index:1000;
+            max-height:200px;
+            overflow-y:auto;
+        ">
+    </div>
+
+</div>
+</div>
+
+    <div
+        id="allergyTags"
+        class="mt-2">
+    </div>
+
+    <input
+        type="hidden"
+        name="allergies"
+        id="allergiesHidden">
+
+
+            <div class="mb-3">
+
+               <label class="form-label">
+    🩺 Diseases
+</label>
+
+               <div class="position-relative">
+
+<input
+    type="text"
+    id="diseaseInput"
+    class="form-control"
+    placeholder="Type disease..."
+    autocomplete="off">
+
+<div
+    id="diseaseSuggestions"
+    class="list-group position-absolute w-100 shadow"
+    style="
+        z-index:1000;
+        max-height:200px;
+        overflow-y:auto;
+    ">
+</div>
+
+</div>
+
+<div
+    id="diseaseTags"
+    class="mt-2">
+</div>
+
+<input
+    type="hidden"
+    name="diseases"
+    id="diseasesHidden">
+
+            </div>
+
+           <div class="mt-4">
+
+    <button
+        type="submit"
+        class="btn btn-success">
+
+        Save Patient
+
+    </button>
+
+    <a
+        href="{% url 'patient_list' %}"
+        class="btn btn-outline-secondary">
+
+        Cancel
+
+    </a>
+
+</div>
+
+        </form>
+
+  
+
+</div>
+<script>
+
+const diseases = [
+"Asthma",
+"Diabetes",
+"Hypertension",
+"Heart Disease",
+"Kidney Disease",
+"Liver Disease",
+"COPD",
+"Tuberculosis",
+"Epilepsy",
+"Arthritis",
+"Thyroid Disorder",
+"Cancer",
+"Depression",
+"Anxiety",
+"Migraine",
+"Stroke",
+"Parkinson's Disease",
+"Alzheimer's Disease",
+"Osteoporosis",
+"Pneumonia"
+];
+
+const allergies = [
+"Penicillin",
+"Amoxicillin",
+"Aspirin",
+"Ibuprofen",
+"Sulfa Drugs",
+"Latex",
+"Peanuts",
+"Milk",
+"Eggs",
+"Shellfish",
+"Dust",
+"Pollen",
+"Soy",
+"Wheat",
+"Bee Stings",
+"Animal Dander",
+"NSAIDs",
+];
+
+let selectedDiseases =
+    "{{ patient.diseases|default:'' }}"
+    .split(",")
+    .filter(Boolean);
+
+let selectedAllergies =
+    "{{ patient.allergies|default:'' }}"
+    .split(",")
+    .filter(Boolean);
+
+function renderTags(tags, container, hiddenField){
+
+    container.innerHTML = "";
+
+    tags.forEach((tag,index)=>{
+
+        const badge =
+            document.createElement("span");
+
+        badge.className =
+            "badge bg-warning text-dark me-2 mb-2";
+
+        badge.innerHTML =
+            tag +
+            ` <span
+                style="cursor:pointer"
+                onclick="
+                removeTag('${container.id}',
+                ${index})">
+
+                ✕
+            </span>`;
+
+        container.appendChild(badge);
+
+    });
+
+    hiddenField.value =
+        tags.join(",");
+}
+renderTags(
+    selectedDiseases,
+    document.getElementById("diseaseTags"),
+    document.getElementById("diseasesHidden")
+);
+
+renderTags(
+    selectedAllergies,
+    document.getElementById("allergyTags"),
+    document.getElementById("allergiesHidden")
+);
+function removeTag(type,index){
+
+    if(type==="diseaseTags"){
+
+        selectedDiseases.splice(index,1);
+
+        renderTags(
+            selectedDiseases,
+            document.getElementById("diseaseTags"),
+            document.getElementById("diseasesHidden")
+        );
+
+    }
+    else{
+
+        selectedAllergies.splice(index,1);
+
+        renderTags(
+            selectedAllergies,
+            document.getElementById("allergyTags"),
+            document.getElementById("allergiesHidden")
+        );
+
+    }
+}
+
+document
+.getElementById("diseaseInput")
+.addEventListener("keydown", function(e){
+
+    if(e.key==="Enter"){
+
+        e.preventDefault();
+
+        const value =
+            this.value.trim();
+
+        if(
+            value &&
+            !selectedDiseases.includes(value)
+        ){
+
+            selectedDiseases.push(value);
+
+            renderTags(
+                selectedDiseases,
+                document.getElementById("diseaseTags"),
+                document.getElementById("diseasesHidden")
+            );
+
+        }
+
+        this.value="";
+    }
+
+});
+
+document
+.getElementById("allergyInput")
+.addEventListener("keydown", function(e){
+
+    if(e.key==="Enter"){
+
+        e.preventDefault();
+
+        const value =
+            this.value.trim();
+
+        if(
+            value &&
+            !selectedAllergies.includes(value)
+        ){
+
+            selectedAllergies.push(value);
+
+            renderTags(
+                selectedAllergies,
+                document.getElementById("allergyTags"),
+                document.getElementById("allergiesHidden")
+            );
+
+        }
+
+        this.value="";
+    }
+
+});
+function setupAutocomplete(
+    inputId,
+    suggestionId,
+    options,
+    selectedArray,
+    renderFunction,
+    container,
+    hiddenField
+){
+
+    const input =
+        document.getElementById(inputId);
+
+    const suggestions =
+        document.getElementById(suggestionId);
+
+    input.addEventListener("keyup", function(){
+
+        const term =
+            this.value.toLowerCase();
+
+        suggestions.innerHTML = "";
+
+        if(term.length < 1)
+            return;
+
+        options.forEach(option => {
+
+            if(
+                option.toLowerCase()
+                .includes(term)
+            ){
+
+                const item =
+                    document.createElement("button");
+
+                item.type = "button";
+
+                item.className =
+                    "list-group-item list-group-item-action";
+
+                item.textContent =
+                    option;
+
+                item.onclick = function(){
+
+                    if(
+                        !selectedArray.includes(option)
+                    ){
+
+                        selectedArray.push(option);
+
+                        renderFunction(
+                            selectedArray,
+                            container,
+                            hiddenField
+                        );
+                    }
+
+                    input.value = "";
+
+                    suggestions.innerHTML = "";
+                    suggestions.style.display = "none";
+
+                };
+                suggestions.style.display = "block";
+                suggestions.appendChild(item);
+
+            }
+
+        });
+
+    });
+
+}
+setupAutocomplete(
+    "diseaseInput",
+    "diseaseSuggestions",
+    diseases,
+    selectedDiseases,
+    renderTags,
+    document.getElementById("diseaseTags"),
+    document.getElementById("diseasesHidden")
+);
+
+setupAutocomplete(
+    "allergyInput",
+    "allergySuggestions",
+    allergies,
+    selectedAllergies,
+    renderTags,
+    document.getElementById("allergyTags"),
+    document.getElementById("allergiesHidden")
+);
+</script>
+{% endblock %}

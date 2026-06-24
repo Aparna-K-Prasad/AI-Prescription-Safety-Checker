@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'includes/navigation.html' %}
+
+<div class="card shadow">
+
+    <div class="card-header">
+        <h2>✏️ Edit Prescription</h2>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Patient
+                </label>
+
+                <select
+                    name="patient"
+                    class="form-select">
+
+                    {% for patient in patients %}
+
+                    <option
+                        value="{{ patient.id }}"
+                        {% if patient.id == prescription.patient.id %}
+                        selected
+                        {% endif %}>
+
+                        {{ patient.name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Doctor Name
+                </label>
+
+                <input
+                    type="text"
+                    name="doctor"
+                    value="{{ prescription.doctor_name }}"
+                    class="form-control">
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Follow-up Date
+                </label>
+
+                <input
+                    type="date"
+                    name="follow_up_date"
+                    value="{{ prescription.follow_up_date|date:'Y-m-d' }}"
+                    class="form-control">
+
+            </div>
+
+            {% for drug in drugs %}
+
+            <div class="border rounded p-3 mb-3">
+
+                <label>
+                    Drug Name
+                </label>
+
+                <div class="position-relative">
+
+    <input
+        type="text"
+        name="drug_name"
+        value="{{ drug.drug_name }}"
+        class="form-control drug-input"
+        autocomplete="off">
+
+    <div
+        class="suggestions list-group position-absolute w-100">
+    </div>
+
+</div>
+
+                <label>
+                    Dosage
+                </label>
+
+                <input
+                    type="text"
+                    name="dosage"
+                    value="{{ drug.dosage }}"
+                    class="form-control mb-2">
+
+                <label>
+                    Duration
+                </label>
+
+                <input
+                    type="text"
+                    name="duration"
+                    value="{{ drug.duration }}"
+                    class="form-control">
+
+            </div>
+
+            {% endfor %}
+
+            <button
+                type="submit"
+                class="btn btn-success">
+
+                Save Changes
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+<script>
+
+function attachAutocomplete(input){
+
+    const suggestions =
+        input.parentElement.querySelector(
+            ".suggestions"
+        );
+
+    input.addEventListener("keyup", function(){
+
+        const term = input.value;
+
+        if(term.length < 1){
+
+            suggestions.innerHTML = "";
+
+            return;
+        }
+
+        fetch(`/search-drugs/?term=${term}`)
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            suggestions.innerHTML = "";
+
+            data.forEach(drug => {
+
+                const item =
+                    document.createElement("button");
+
+                item.type = "button";
+
+                item.className =
+                    "list-group-item list-group-item-action";
+
+                item.textContent = drug;
+
+                item.onclick = function(){
+
+                    input.value = drug;
+
+                    suggestions.innerHTML = "";
+
+                };
+
+                suggestions.appendChild(item);
+
+            });
+
+        });
+
+    });
+
+}
+
+document
+.querySelectorAll(".drug-input")
+.forEach(input => {
+
+    attachAutocomplete(input);
+
+});
+
+</script>
+{% endblock %}

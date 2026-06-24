@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="card-body">
+{% include 'includes/navigation.html' %}
+
+<h2 class="mb-4">
+    📋 Prescription Safety Report
+</h2>
+
+<a
+    href="/report/{{ prescription.id }}/pdf/"
+    class="btn btn-success mb-4">
+
+    📄 Download PDF Report
+
+</a>
+<a
+    href="{% url 'edit_prescription' prescription.id %}"
+    class="btn btn-warning ms-2">
+
+    ✏️ Edit Prescription
+
+</a>
+<h4>Patient Information</h4>
+
+<p>
+<strong>Name:</strong>
+{{ prescription.patient.name }}
+</p>
+
+<p>
+<strong>Doctor:</strong>
+{{ prescription.doctor_name }}
+</p>
+
+<hr>
+
+<h4>Medicines</h4>
+
+<ul>
+
+{% for drug in drugs %}
+
+<li>
+{{ drug.drug_name }}
+({{ drug.dosage }})
+</li>
+
+{% endfor %}
+
+</ul>
+
+<hr>
+
+<h4>Drug Interaction Alerts</h4>
+
+{% if interactions %}
+
+<ul class="list-group">
+
+{% for alert in interactions %}
+
+<li class="list-group-item list-group-item-danger">
+
+⚠ {{ alert.drug1 }}
++ {{ alert.drug2 }}
+
+<br>
+
+Severity:
+{{ alert.severity }}
+
+<br>
+
+{{ alert.recommendation }}
+
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p>No interactions detected.</p>
+
+{% endif %}
+
+<hr>
+
+<h4>Allergy Alerts</h4>
+
+{% if allergies %}
+
+<ul class="list-group">
+
+{% for alert in allergies %}
+
+<li class="list-group-item list-group-item-warning">
+
+⚠ {{ alert.message }}
+
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p>No allergy alerts.</p>
+
+{% endif %}
+
+<hr>
+
+<h4>Contraindication Alerts</h4>
+
+{% if contraindications %}
+
+<ul class="list-group">
+
+{% for alert in contraindications %}
+
+<li class="list-group-item list-group-item-warning">
+
+⚠ {{ alert.message }}
+
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p>No contraindications detected.</p>
+
+{% endif %}
+<hr>
+
+<h4>
+    💡 Suggested Alternatives
+</h4>
+
+{% if alternatives %}
+
+<div class="list-group">
+
+{% for alt in alternatives %}
+
+<div class="list-group-item">
+    <strong>
+
+        {{ alt.drug }}
+
+    </strong>
+
+    →
+
+    <span class="text-success">
+
+        {{ alt.alternative }}
+
+    </span>
+    <hr>
+
+    <br>
+   
+    <small class="text-muted">
+
+        {{ alt.reason }}
+
+    </small>
+     <br><br>
+
+        <a
+        href="{% url 'replace_drug' prescription.id %}?old_drug={{ alt.drug }}&new_drug={{ alt.alternative }}"
+        class="btn btn-sm btn-success">
+
+        🔄 Replace & Reanalyze
+
+    </a>
+    <div class="alert alert-warning mt-3 mb-0">
+
+    ⚠ After replacement, verify:
+
+    <ul class="mb-0 mt-2">
+        <li>Dosage</li>
+        <li>Duration</li>
+        <li>Patient suitability</li>
+    </ul>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<p>
+    No alternatives required.
+</p>
+
+{% endif %}
+<hr>
+<h4>
+    💊 Drug Information
+</h4>
+
+{% for info in drug_info %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <h5>
+            {{ info.drug }}
+        </h5>
+
+        <button
+            class="btn btn-outline-info btn-sm mb-3"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#drugInfo{{ forloop.counter }}">
+
+            View Drug Information
+
+        </button>
+
+        <div
+            class="collapse"
+            id="drugInfo{{ forloop.counter }}">
+
+            <p>
+                <strong>Side Effects:</strong>
+                {{ info.side_effects }}
+            </p>
+
+            <p>
+                <strong>Pregnancy:</strong>
+                {{ info.pregnancy }}
+            </p>
+
+            <p>
+                <strong>Pediatric:</strong>
+                {{ info.pediatric }}
+            </p>
+
+            <p>
+                <strong>Max Daily Dose:</strong>
+                {{ info.max_dose }}
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<p>
+    No drug information available.
+</p>
+
+{% endfor %}
+</div>
+
+</div>
+
+
+{% endblock %}
