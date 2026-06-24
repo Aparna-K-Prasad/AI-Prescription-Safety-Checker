@@ -155,7 +155,7 @@ http://127.0.0.1:8000/
 
 ### Edit Prescription
 
-![Edit Prescription](screenshots/edit _prescription.png)
+![Edit Prescription](screenshots/edit_prescription.png)
 
 ---
 
